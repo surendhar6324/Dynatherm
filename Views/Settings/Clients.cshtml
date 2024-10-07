@@ -1,0 +1,511 @@
+﻿@{
+    ViewBag.Title = "Clients :: Sahaayak";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@await Html.PartialAsync("_MainMenu")
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Services</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Settings</a></li>
+                        <li class="breadcrumb-item active">Clients</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-7">
+                    <div class="card card-warning">
+                        <div class="card-header">
+                            <h3 class="card-title">Clients</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <!-- Start of Creating the Server Side Paging Components*-->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div style="display: flex;float: left;align-items: center;">
+                                        <span>Show</span>
+                                        <select id="ddlClientsTake" class="form-control" onchange="ResetPagination('Pagination-Clients');Clients_Details(1);">
+                                            <option value="10" selected>10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                        </select>
+                                        <span>records</span>
+                                    </div>
+                                    <input type="hidden" id="hdnSortColumn" name="hdnSortColumn">
+                                    <input type="hidden" id="hdnSortAscending" name="hdnSortAscending">
+                                    <input type="hidden" id="hdnCurrentClientsPage" name="hdnCurrentClientsPage">
+                                    <input type="hidden" id="hdnClientID" name="hdnClientID">
+                                    
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="float: right;">
+                                        <input type="text" id="txtClientsSearch" placeholder="Search" class="form-control" oninput="doClientsSearch();">
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <!-- End of Creating the Server Side Paging Components*-->
+                            <div id="divClients"></div>
+                            <!-- Start of Creating the Server Side Paging Components*-->
+                            <br />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div style="float: left;">
+                                        <span id="lblClientsCount"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="float: right;">
+                                        <p id="Pagination-Clients"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End of Creating the Server Side Paging Components*-->
+                        </div>
+                        <div class="overlay" id="divoverlay" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: rgba(255, 255, 255, 0.8); z-index: 1000;">
+                            <i class="fa fa-sync fa-spin" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></i>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-5">
+                    <div class="card card-warning">
+                        <div class="card-header">
+                            <h3 class="card-title">Clients</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <!-- Start of Creating the Server Side Paging Components*-->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div style="display: flex;float: left;align-items: center;">
+                                        <span>Show</span>
+                                        <select id="ddlClientsTake" class="form-control" onchange="ResetPagination('Pagination-Clients');Clients_Details(1);">
+                                            <option value="10" selected>10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                        </select>
+                                        <span>records</span>
+                                    </div> 
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="float: right;">
+                                        <input type="text" id="txtClientsSearch" placeholder="Search" class="form-control" oninput="doClientsSearch();">
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <!-- End of Creating the Server Side Paging Components*-->
+                            <div id="divClients"></div>
+                            <!-- Start of Creating the Server Side Paging Components*-->
+                            <br />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div style="float: left;">
+                                        <span id="lblClientsCount"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="float: right;">
+                                        <p id="Pagination-Clients"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End of Creating the Server Side Paging Components*-->
+                        </div>
+                        <div class="overlay" id="divoverlay" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: rgba(255, 255, 255, 0.8); z-index: 1000;">
+                            <i class="fa fa-sync fa-spin" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></i>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+ 
+
+<div class="modal fade" id="modal-asgn0002">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Unassign Service</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="hdnServiceRequestID" />
+                <div class="row">
+                    <div class="col-md-5">Service Name</div>
+                    <div class="col-md-7"><span id="lblEditServiceName"></span></div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-5">Member Name</div>
+                    <div class="col-md-7"><span id="lblEditMemberName"></span></div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-5">Address</div>
+                    <div class="col-md-7"><span id="lblEditAddress"></span></div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-5">Partner</div>
+                    <div class="col-md-7">
+                        <select id="editPartner" class="form-control">
+                        </select>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="Update_Unassign_Clicked();">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        ShowElement('divoverlay');
+
+        document.getElementById("hdnCurrentClientsPage").value = 1;
+
+        Clients_Init_Table();
+
+        Clients_Load_Details(1);
+
+        $('#Pagination-Clients').on("page", function (event, num) {
+            Clients_Load_Details(num);
+        });
+
+    });
+
+    function Filter_Click() {
+        ResetPagination('Pagination-Clients');
+        Clients_Load_Details(1);
+    }
+
+    function Ëdit_Clients_Clicked(Client_ID) {
+
+        document.getElementById("hdnClientID").value = Client_ID;
+
+        var datafilter = {
+            client_id: Client_ID,
+        };
+
+        $.ajax({
+            type: "POST",
+            url: '../Settings/Ëdit_Clients_Load',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            traditional: true,
+            data: datafilter,
+            success: function (response) {
+                Ëdit_Clients_Load(response);
+            },
+            error: function (xhr) {
+                HideElement('divoverlay');
+            }
+        });
+
+    }
+
+    function Update_Clients_Clicked() {
+
+        var datafilter = {
+            client_id: document.getElementById("hdnClientID").value,
+            provider_id: document.getElementById("txtClientName").value,
+            provider_id: document.getElementById("txtPurchaser").value,
+            provider_id: document.getElementById("ddlState").value,
+            provider_id: document.getElementById("txtLocation").value,
+        };
+
+        $.ajax({
+            type: "POST",
+            url: '../Request/Update_Clients_Clicked',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            traditional: true,
+            data: datafilter,
+            success: function (response) {
+                $('#modal-asgn0002').modal('toggle');
+                ShowElement('divoverlay');
+                var currentPage = document.getElementById('hdnCurrentClientsPage').value;
+                Clients_Load_Details(currentPage);
+                clearPageData();
+            },
+            error: function (xhr) {
+                HideElement('divoverlay');
+            }
+        });
+    }
+
+</script>
+
+<script type="text/javascript">
+
+    function Clients_Load_Details(num) {
+        var TakeCount = document.getElementById("ddlClientsTake").value;
+        var Search = document.getElementById("txtClientsSearch").value;
+
+        var SortColumn = document.getElementById("hdnSortColumn").value;
+        var SortAscending = document.getElementById("hdnSortAscending").value;
+
+        var datafilter = {
+            take: TakeCount,
+            searchvalue: Search,
+            skip: num,
+            sortcolumn: SortColumn,
+            sortascending: SortAscending
+        };
+
+        $.ajax({
+            type: "POST",
+            url: '../Request/Clients_Load',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            traditional: true,
+            data: datafilter,
+            success: function (response) {
+                Clients_Load(response);
+            },
+            error: function (xhr) {
+                HideElement('divoverlay');
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: '../Request/ClientsCount_Load',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            traditional: true,
+            data: datafilter,
+            success: function (response) {
+                ClientsCount_Load(response);
+            },
+            error: function (xhr) {
+                HideElement('divoverlay');
+            }
+        });
+
+    }
+
+    function Clients_Load(response) {
+        var dListdatafilter = JSON.parse(response.listdatafilter);
+
+        Listdatafilter = '';
+        //Listdatafilter += '<div id="divtbl">';
+        for (var i = 0; i < dListdatafilter.length; i++) {
+            Listdatafilter += '<tr role="row" class="odd">';
+            Listdatafilter += '<td style="width:20%">' + dListdatafilter[i].client_name + '</td>';
+            Listdatafilter += '<td style="width:15%">' + dListdatafilter[i].purchaser + '</td>';
+            Listdatafilter += '<td style="width:15%">' + dListdatafilter[i].state + '</td>';
+            Listdatafilter += '<td style="width:20%">' + dListdatafilter[i].location + '</td>'; 
+            Listdatafilter += '<td style="width:5%"><button type="button" class="btn btn-warning btn-flat" data-toggle="modal" data-target="#modal-asgn0002" onclick="Ëdit_Clients_Clicked(' + dListdatafilter[i].client_id + ')"><i class="fas fa-edit"></i></button></td > ';
+            Listdatafilter += '</tr>';
+        }
+        document.getElementById('tbClients').innerHTML = Listdatafilter;
+
+        if (dListdatafilter.length == 0) {
+            document.getElementById('tbClients').innerHTML = '<tr class="odd dataTables_empty"><td valign="top" colspan="14" style="text-align:center;">No records found</td></tr>';
+        }
+        HideElement('divoverlay');
+    }
+
+    function ClientsCount_Load(response) {
+        var SkipCount = JSON.parse(response.skipCount);
+        var TotalCount = JSON.parse(response.totalCount);
+
+        var totalPage = Math.floor(TotalCount / document.getElementById("ddlClientsTake").value);
+        var remainder = TotalCount % document.getElementById("ddlClientsTake").value;
+        if (remainder > 0) {
+            totalPage = totalPage + 1
+        }
+        if (totalPage == '0') {
+            totalPage = 1
+        }
+
+        var showCount = +SkipCount + +1;
+        if (TotalCount == '0') {
+            showCount = '0';
+        }
+
+        var toCount = +SkipCount + +document.getElementById("ddlClientsTake").value;
+
+        if (toCount > TotalCount) {
+            toCount = +SkipCount + +remainder;
+        }
+
+        document.getElementById('lblClientsCount').innerText = (showCount) + "-" + (toCount) + " of " + TotalCount + " records";
+
+        Init_BootPage('Pagination-Clients', totalPage); 
+    }
+
+    function Clients_Init_Table() {
+
+        var html = '<div class="table-responsive"><table id="tblClients" class="table table-hover text-nowrap" style="width:100%">';
+        html += '<thead><tr style="font-weight:bold">';
+
+        html += '<td style="width:20%">Client Name<div style="float: right;">';
+        html += '<button type="button" class="btn btn-link" id="ServiceNameSRT"' + '" value="servicename" style="color:grey;margin: -10px" onclick="Clients_Sort_Table(this);"><i class="sssorting_def"></i></button>';
+        html += '</div></td>';
+
+        html += '<td style="width:15%">Purchaser<div style="float: right;">';
+        html += '<button type="button" class="btn btn-link" id="ServiceNameSRT"' + '" value="membername" style="color:grey;margin: -10px" onclick="Clients_Sort_Table(this);"><i class="sssorting_def"></i></button>';
+        html += '</div></td>';
+
+        html += '<td style="width:15%">State<div style="float: right;">';
+        html += '<button type="button" class="btn btn-link" id="ServiceNameSRT"' + '" value="membername" style="color:grey;margin: -10px" onclick="Clients_Sort_Table(this);"><i class="sssorting_def"></i></button>';
+        html += '</div></td>';
+
+        html += '<td style="width:20%">Location<div style="float: right;">';
+        html += '</div></td>'; 
+
+        html += '<td style="width:5%"></td>';
+
+        html += '</tr></thead>';
+
+        html += '<tbody id="tbClients">';
+
+        html += '</tbody>';
+        html += '</table></div>';
+
+        document.getElementById('divClients').innerHTML = html;
+
+        $('#tblClients tbody').on('click', 'tr', function () {
+            $(this).addClass('selected').siblings().removeClass("selected");
+        });
+    }
+
+    function Clients_Sort_Table(table) {
+
+        // Begining of Sort
+        var currentCell = document.getElementById(table.id);
+        var value = currentCell.value;
+        var sortAsc;
+
+        var changeIcon = currentCell.children[0];
+        var newIcon;
+        if (changeIcon.classList.contains('sssorting_asc')) {
+            newIcon = 'sssorting_desc';
+            sortAsc = false;
+        }
+        else if (changeIcon.classList.contains('sssorting_desc')) {
+            newIcon = 'sssorting_asc';
+            sortAsc = true;
+        }
+        else if (changeIcon.classList.contains('sssorting_def')) {
+            newIcon = 'sssorting_asc';
+            sortAsc = true;
+        }
+
+        changeIcon.className = '';
+        var tableheader = $(document.getElementById(table.id)).parents().eq(2);
+        for (var j = 0, col; col = tableheader[0].cells[j]; j++) {
+            var button = col.children;
+            if (button.length > 0 && col.children[0].tagName == 'DIV') {
+                var icon = col.children[0].children[0].children[0];
+                icon.className = '';
+                icon.classList.add('sssorting_def');
+            }
+            //iterate through columns
+            //columns would be accessed using the "col" variable Clientsed in the for loop
+        }
+        changeIcon.className = '';
+        changeIcon.classList.add(newIcon);
+
+        document.getElementById("hdnSortColumn").value = value;
+        document.getElementById("hdnSortAscending").value = sortAsc;
+        // End of Sort
+        ResetPagination('Pagination-Clients');
+        Clients_Load_Details(1);
+    }
+
+
+    function clearPageData() {
+        $("#txtClientName").val('');
+        $("#txtPurchaser").val('');
+        document.getElementById('ddlState').selectedIndex = 0;
+        $("#txtLocation").empty(); 
+
+        $("#hdnClientID").val('');
+    }
+
+    function Ëdit_UnClients_Load(response) {
+        clearPageData();
+        var dUnClients = JSON.parse(response.general);
+
+        document.getElementById('txtClientName').innerText = dClients.client_name;
+        document.getElementById('txtPurchaser').innerText = dClients.purchaser;
+        document.getElementById('txtLocation').innerHTML = dClients.location;
+
+        document.getElementById('ddlState').value = dClients.state;
+
+        Clients_DropDown_Load(response);
+    }
+
+    function Clients_DropDown_Load(response) {
+        var dClientsPartners = JSON.parse(response.unClients_Partners);
+
+        var ddlState = document.getElementById("ddlState");
+
+        for (var i = 0; i < dClientsPartners.length; i++) {
+
+            var editoption = document.createElement('option');
+            var single = dClientsPartners[i];
+            editoption.text = single.state_name;
+            editoption.value = single.state_id;
+
+            ddlState.add(editoption, i);
+        }
+    }
+
+    function doClientsSearch() {
+        clearTimeout(delayTimer);
+        delayTimer = setTimeout(function () {
+            ResetPagination('Pagination-Clients');
+            Clients_Load_Details(1);
+        }, 800);
+    }
+
+    function ShowElement(element) {
+        var x = document.getElementById(element);
+        x.style.display = "block";
+    }
+    function HideElement(element) {
+        var x = document.getElementById(element);
+        x.style.display = "none";
+    }
+</script>
